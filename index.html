@@ -185,7 +185,32 @@
       <section
         id="word-container"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 bg-gray-100 w-full p-8 mt-12 rounded-xl"
-      ></section>
+      >
+        <div class="text-center col-span-full py-10">
+          <p
+            class="font-bangla text-xs md:text-xl font-medium text-gray-500 mb-2 md:mb-6"
+          >
+            আপনি এখনো কোন Lesson Select করেন নি
+          </p>
+          <h2 class="font-bangla text-2xl md:text-5xl font-semibold">
+            একটি Lesson Select করুন।
+          </h2>
+        </div>
+      </section>
+
+      <dialog id="word_detail_modal" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+          <div class="detail-container"></div>
+          <div class="modal-action flex justify-start">
+            <form method="dialog">
+              <!-- if there is a button in form, it will close the modal -->
+              <button class="btn btn-primary rounded-lg">
+                Complete Learning
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
       <!-- ===== End: Show Leassons ===== -->
     </main>
     <!-- ===== End: Main Section ===== -->

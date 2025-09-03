@@ -1,38 +1,101 @@
+const createElements = (arr) => {
+  const htmlElements = arr.map(
+    (elem) =>
+      `<span class="btn bg-cyan-50 rounded-lg border-none font-normal">${elem}</span>`
+  );
+  return htmlElements.join(" ");
+};
+
 const loadLeassons = () => {
   fetch("https://openapi.programming-hero.com/api/levels/all") // promise of response
     .then((res) => res.json()) // promise of json
     .then((json) => showLevel(json.data));
 };
 
-const loadLessons = (id) => {
+const loadLevelWord = (id) => {
   const url = `https://openapi.programming-hero.com/api/level/${id}`;
   fetch(url).then((res) =>
-    res.json().then((lessonData) => showLessonWord(lessonData.data))
+    res.json().then((lessonData) => {
+      const btns = document.querySelectorAll(".lesson-btn");
+      const activeBtn = document.getElementById(`lesson-btn-${id}`);
+      btns.forEach((btn) => {
+        btn.classList.add("btn-outline");
+      });
+      activeBtn.classList.remove("btn-outline");
+      showLevelWord(lessonData.data);
+    })
   );
 };
 
-// {
-//     "id": 71,
-//     "level": 1,
-//     "word": "Apple",
-//     "meaning": "আপেল",
-//     "pronunciation": "অ্যাপল"
-// }
+const loadWordDetail = (id) => {
+  const url = `https://openapi.programming-hero.com/api/word/${id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((json) => showWordDetail(json.data));
+};
 
-const showLessonWord = (words) => {
+const showWordDetail = (detail) => {
+  const detailModal = document.getElementById("word_detail_modal");
+  const detailContainer = document.querySelector(".detail-container");
+  detailContainer.innerHTML = "";
+  const detailCard = document.createElement("div");
+  detailCard.innerHTML = `
+            <div class="border border-[#EDF7FF] rounded-lg p-5">
+              <h3 class="text-2xl font-bold">
+                ${detail.word} (<i class="fa-solid fa-microphone-lines"></i>:${
+    detail.pronunciation
+  })
+              </h3>
+              <p class="mt-5 font-semibold">Meaning</p>
+              <p class="font-bangla py-4 font-semibold">${detail.meaning}</p>
+              <p class="font-bold">Example</p>
+              <p class="py-2">${detail.sentence}</p>
+              <p class="font-bangla font-semibold py-4">সমার্থক শব্দ গুলো</p>
+              <div class="space-x-2">
+                    ${createElements(detail.synonyms)}
+              </div>
+            </div>
+    `;
+  detailContainer.appendChild(detailCard);
+  detailModal.showModal();
+};
+
+const showLevelWord = (words) => {
   const wordContainer = document.getElementById("word-container");
   wordContainer.innerHTML = "";
 
+  if (!words.length) {
+    wordContainer.innerHTML = `
+    <div class="text-center col-span-full md:py-10">
+        <img class="mx-auto" src="./assets/alert-error.png" alt="alert sign" />
+        <p
+        class="font-bangla text-xs md:text-xl font-medium text-gray-500 my-2 md:my-6"
+        >
+        এই Lesson এ এখনো কোন Vocabulary যুক্ত করা হয়নি।
+        </p>
+        <h2 class="font-bangla text-2xl md:text-5xl font-semibold">
+        নেক্সট Lesson এ যান
+        </h2>
+    </div>
+        `;
+    return;
+  }
   words.forEach((word) => {
     const card = document.createElement("div");
     card.innerHTML = `
-    <div class="card bg-base-100 card-xl shadow-sm">
+    <div class="card bg-base-100 card-xl shadow-sm h-full">
     <div class="card-body text-center">
-        <h3 class="text-2xl font-bold">${word.word}</h3>
+        <h3 class="text-2xl font-bold">${
+          word.word ? word.word : "শব্দ পাওয়া যায় নি"
+        }</h3>
         <h4 class="text-sm font-medium">Meaning /Pronunciation</h4>
-        <h2 class="font-bangla text-2xl font-bold mt-4 mb-8">"${word.meaning} / ${word.pronunciation}"</h2>
+        <h2 class="font-bangla text-2xl font-bold mt-4 mb-8">"${
+          word.meaning ? word.meaning : "অর্থ পাওয়া যায় নি"
+        } / ${word.pronunciation}"</h2>
         <div class="justify-between card-actions">
-            <button class="btn bg-cyan-50 hover:bg-cyan-200 border-none">
+            <button onclick="loadWordDetail(${
+              word.id
+            })" class="btn bg-cyan-50 hover:bg-cyan-200 border-none">
                 <i class="fa-solid fa-circle-info text-xl"></i>
             </button>
             <button class="btn bg-cyan-50 hover:bg-cyan-200 border-none">
@@ -42,10 +105,26 @@ const showLessonWord = (words) => {
     </div> 
     </div>
     `;
-
+    // append the card into wordContainer
     wordContainer.appendChild(card);
   });
 };
+
+// {
+//     "word": "Diligent",
+//     "meaning": "পরিশ্রমী",
+//     "pronunciation": "ডিলিজেন্ট",
+//     "level": 5,
+//     "sentence": "He is a diligent student who studies every day.",
+//     "points": 5,
+//     "partsOfSpeech": "adjective",
+//     "synonyms": [
+//         "hardworking",
+//         "industrious",
+//         "persistent"
+//     ],
+//     "id": 4
+// }
 
 const showLevel = (lessons) => {
   // get the container & empty
@@ -57,7 +136,7 @@ const showLevel = (lessons) => {
     // create an element & set the html
     const div = document.createElement("div");
     div.innerHTML = `
-    <button onclick="loadLessons(${lesson.level_no})" class="btn btn-outline btn-primary">
+    <button id="lesson-btn-${lesson.level_no}" onclick="loadLevelWord(${lesson.level_no})" class="lesson-btn btn btn-outline btn-primary">
           <i class="fa-solid fa-book-open"></i> Lesson ${lesson.level_no}
     </button>
     
