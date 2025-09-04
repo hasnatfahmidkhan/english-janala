@@ -181,11 +181,17 @@
         ></div>
       </section>
 
+      <!-- ===== Start: Loader ===== -->
+      <div id="loader" class="flex justify-center items-center my-20 hidden">
+        <span class="loading loading-dots loading-xl"></span>
+      </div>
+      <!-- ===== End: Loader ===== -->
       <!-- ===== Start: Show Leassons ===== -->
       <section
         id="word-container"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 bg-gray-100 w-full p-8 mt-12 rounded-xl"
       >
+        <!-- Default content of lessons  -->
         <div class="text-center col-span-full py-10">
           <p
             class="font-bangla text-xs md:text-xl font-medium text-gray-500 mb-2 md:mb-6"
@@ -197,7 +203,9 @@
           </h2>
         </div>
       </section>
+      <!-- ===== End: Show Leassons ===== -->
 
+      <!-- ===== Start: Word Detail Modal ===== -->
       <dialog id="word_detail_modal" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
           <div class="detail-container"></div>
@@ -211,7 +219,7 @@
           </div>
         </div>
       </dialog>
-      <!-- ===== End: Show Leassons ===== -->
+      <!-- ===== End: Word Detail Modal ===== -->
     </main>
     <!-- ===== End: Main Section ===== -->
     <!-- ===== Start: Script JS ===== -->

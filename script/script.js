@@ -6,27 +6,47 @@ const createElements = (arr) => {
   return htmlElements.join(" ");
 };
 
+// manageLoader
+const manageLoader = (status) => {
+  if (status) {
+    document.getElementById("loader").classList.remove("hidden");
+    document.getElementById("word-container").classList.add("hidden");
+  } else {
+    document.getElementById("word-container").classList.remove("hidden");
+    document.getElementById("loader").classList.add("hidden");
+  }
+};
+
+// remove Active Class from Btn
+const removeActive = () => {
+  const btns = document.querySelectorAll(".lesson-btn");
+  btns.forEach((btn) => {
+    btn.classList.add("btn-outline");
+  });
+};
+
+// Load Lessson from API
 const loadLeassons = () => {
   fetch("https://openapi.programming-hero.com/api/levels/all") // promise of response
     .then((res) => res.json()) // promise of json
     .then((json) => showLevel(json.data));
 };
 
+// Load Level Word from API
 const loadLevelWord = (id) => {
+  // show loader for loading level word
+  manageLoader(true);
   const url = `https://openapi.programming-hero.com/api/level/${id}`;
   fetch(url).then((res) =>
     res.json().then((lessonData) => {
-      const btns = document.querySelectorAll(".lesson-btn");
+      removeActive();
       const activeBtn = document.getElementById(`lesson-btn-${id}`);
-      btns.forEach((btn) => {
-        btn.classList.add("btn-outline");
-      });
       activeBtn.classList.remove("btn-outline");
       showLevelWord(lessonData.data);
     })
   );
 };
-
+// Load Word Details from API
 const loadWordDetail = (id) => {
   const url = `https://openapi.programming-hero.com/api/word/${id}`;
   fetch(url)
@@ -34,6 +54,7 @@ const loadWordDetail = (id) => {
     .then((json) => showWordDetail(json.data));
 };
 
+// show Modal or Word Details
 const showWordDetail = (detail) => {
   const detailModal = document.getElementById("word_detail_modal");
   const detailContainer = document.querySelector(".detail-container");
@@ -78,6 +99,7 @@ const showLevelWord = (words) => {
         </h2>
     </div>
         `;
+    manageLoader(false);
     return;
   }
   words.forEach((word) => {
@@ -107,6 +129,7 @@ const showLevelWord = (words) => {
     `;
     // append the card into wordContainer
     wordContainer.appendChild(card);
+    manageLoader(false);
   });
 };
 
