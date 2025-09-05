@@ -81,6 +81,7 @@ const showWordDetail = (detail) => {
   detailModal.showModal();
 };
 
+// show or dispaly word card
 const showLevelWord = (words) => {
   const wordContainer = document.getElementById("word-container");
   wordContainer.innerHTML = "";
@@ -133,22 +134,7 @@ const showLevelWord = (words) => {
   });
 };
 
-// {
-//     "word": "Diligent",
-//     "meaning": "পরিশ্রমী",
-//     "pronunciation": "ডিলিজেন্ট",
-//     "level": 5,
-//     "sentence": "He is a diligent student who studies every day.",
-//     "points": 5,
-//     "partsOfSpeech": "adjective",
-//     "synonyms": [
-//         "hardworking",
-//         "industrious",
-//         "persistent"
-//     ],
-//     "id": 4
-// }
-
+// show lessons level
 const showLevel = (lessons) => {
   // get the container & empty
   const lessonsContainer = document.querySelector("#lessons-container");
@@ -170,3 +156,21 @@ const showLevel = (lessons) => {
 };
 
 loadLeassons();
+
+// Search Option 
+document.getElementById("search-btn").addEventListener("click", (e) => {
+  removeActive();
+  const searchInp = document.getElementById("search-input");
+  const searchValue = searchInp.value.toLowerCase().trim();
+  fetch("https://openapi.programming-hero.com/api/words/all").then((res) =>
+    res.json().then((words) => {
+      const allWrods = words.data;
+      const filterWords = allWrods.filter((word) =>
+        word.word.toLowerCase().includes(searchValue)
+      );
+      // console.log(filterWords);
+      showLevelWord(filterWords);
+    })
+  );
+  // console.log(searchValue);
+});
