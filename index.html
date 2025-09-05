@@ -83,7 +83,7 @@
                   ><i class="fa-solid fa-circle-question"></i> FAQ</a
                 >
               </li>
-              <li>
+              <li onclick="showLearnWord()">
                 <a href="#" class="text-sm"
                   ><i class="fa-solid fa-book-open"></i> Learn</a
                 >
@@ -107,7 +107,7 @@
                   ><i class="fa-solid fa-circle-question"></i> FAQ</a
                 >
               </li>
-              <li>
+              <li onclick="showLearnWord()">
                 <a href="#" class="btn btn-outline btn-primary"
                   ><i class="fa-solid fa-book-open"></i> Learn</a
                 >
@@ -125,6 +125,25 @@
         </div>
       </div>
       <!-- ===== End: Navbar ===== -->
+
+      <!-- learned words modal  -->
+      <!-- Open the modal using ID.showModal() method -->
+      <!-- <button class="btn" onclick="">open modal</button> -->
+      <dialog id="learnWords" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+          <h3 class="text-xl font-bold">Learned Words</h3>
+          <ul
+            id="learn-words-container"
+            class="p-4 list-disc grid grid-cols-3 gap-2"
+          ></ul>
+          <div class="modal-action flex justify-start">
+            <form method="dialog">
+              <!-- if there is a button in form, it will close the modal -->
+              <button class="btn btn-primary">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </header>
     <!-- ===== End: Header Section ===== -->
 
@@ -183,10 +202,13 @@
 
       <!-- ===== Start: Serach Word Option ===== -->
       <section class="flex justify-center mt-12 gap-4">
-        <input id="search-input" type="search" placeholder="Serach Word" class="input focus:border-none focus:outline w-52" />
-        <button id="search-btn" class="btn btn-primary ">
-          Search 
-        </button>
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Serach Word"
+          class="input focus:border-none focus:outline w-52"
+        />
+        <button id="search-btn" class="btn btn-primary">Search</button>
       </section>
       <!-- ===== End: Serach Word Option ===== -->
       <!-- ===== Start: Loader ===== -->

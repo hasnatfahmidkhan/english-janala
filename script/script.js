@@ -6,6 +6,29 @@ const createElements = (arr) => {
   return htmlElements.join(" ");
 };
 
+// speak the word functionality
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN"; // English
+  window.speechSynthesis.speak(utterance);
+}
+
+// saveWord
+const saveWord = (word) => {
+  console.log(word);
+  const learnWordContainer = document.getElementById("learn-words-container");
+  const li = document.createElement("li");
+  li.innerHTML = `
+  <li>${word}</li>
+  `;
+  learnWordContainer.appendChild(li);
+};
+
+const showLearnWord = () => {
+  // console.log("all words")
+  learnWords.showModal();
+};
+
 // manageLoader
 const manageLoader = (status) => {
   if (status) {
@@ -108,6 +131,9 @@ const showLevelWord = (words) => {
     card.innerHTML = `
     <div class="card bg-base-100 card-xl shadow-sm h-full">
     <div class="card-body text-center">
+        <div onclick="saveWord('${
+          word.word
+        }')" class="text-right mb-3 text-2xl cursor-pointer"><i class="fa-regular fa-heart"></i></div>
         <h3 class="text-2xl font-bold">${
           word.word ? word.word : "শব্দ পাওয়া যায় নি"
         }</h3>
@@ -121,7 +147,9 @@ const showLevelWord = (words) => {
             })" class="btn bg-cyan-50 hover:bg-cyan-200 border-none">
                 <i class="fa-solid fa-circle-info text-xl"></i>
             </button>
-            <button class="btn bg-cyan-50 hover:bg-cyan-200 border-none">
+            <button onclick="pronounceWord('${
+              word.word
+            }')" class="btn bg-cyan-50 hover:bg-cyan-200 border-none">
                 <i class="fa-solid fa-volume-high text-xl"></i>
             </button>
         </div>
@@ -157,7 +185,7 @@ const showLevel = (lessons) => {
 
 loadLeassons();
 
-// Search Option 
+// Search Option
 document.getElementById("search-btn").addEventListener("click", (e) => {
   removeActive();
   const searchInp = document.getElementById("search-input");
